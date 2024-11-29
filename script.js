@@ -98,7 +98,7 @@ window.onload = () => {
     });
 
     function peticionAJAXmoderna(nombrePelicula, page = 1) {
-        const URL = "http://www.omdbapi.com/?apikey=54349e1c&";
+        const URL = "https://www.omdbapi.com/?apikey=54349e1c&";
         let filterParams = '';
         if (filters.type) filterParams += `&type=${filters.type}`;
         if (filters.year) filterParams += `&y=${filters.year}`;
