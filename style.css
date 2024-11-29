@@ -1,0 +1,434 @@
+* {
+  padding: 0;
+  border: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Parkinsans", sans-serif;
+}
+
+body {
+  background-color: #00050d;
+  padding-top: 5rem;
+}
+
+/* -------------------- Header -------------------- */
+.headerContainer {
+  color: wheat;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 1rem;
+  flex-wrap: nowrap;
+  position: fixed; 
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; 
+  transition: top 0.3s ease-out;
+  width: 90%;
+  backdrop-filter: blur(20px); 
+}
+
+
+.headerContainer p {
+  font-size: x-large;
+}
+
+.contentHeader {
+  flex-basis: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+}
+
+input {
+  border: 1px solid black;
+  width: 50%;
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+}
+
+#form{
+  flex-basis: 50%;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+/* General Button Styles */
+.headerBtn {
+  padding: 0.8rem 1.2rem; /* Add padding for better size */
+  background-color: #007bff;
+  color: white; /* Ensure text is white for better contrast */
+  border: 1px solid #0056b3; /* Border color matching the button */
+  border-radius: 0.5rem;
+  font-size: 1rem; /* Standard font size */
+  font-weight: 500; /* Slightly bold for clarity */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover effect */
+.headerBtn:hover {
+  background-color: #0056b3;
+  border-color: #003f8e; /* Darker border color on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* Focus effect for accessibility */
+.headerBtn:focus {
+  outline: 2px solid #0056b3; /* Add outline for better focus visibility */
+  outline-offset: 2px;
+}
+
+/* Active button effect */
+.headerBtn:active {
+  background-color: #004494;
+  transform: translateY(1px); /* Slight push-down effect on click */
+}
+
+#searchBtn, #fiterBtn {
+  padding: 0.8rem;
+  width: 20%;
+  background-color: #007bff;
+  border-radius: 0.3rem;
+}
+
+#searchBtn:hover, #fiterBtn:hover {
+  background-color: #0056b3;
+  cursor: pointer;
+}
+
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 100%;
+}
+/* Filter Modal Styles */
+#filterModalTitle{
+  margin-bottom: 5px;
+}
+
+#filterModal select,
+#filterModal input[type="number"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* New styles for button container */
+.filterModalButtonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.filterModalBtn {
+  width: 45%;
+  padding: 0.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Optional: Add some hover effects */
+.filterModalBtn:hover {
+  opacity: 0.9;
+}
+
+/* -------------------- Peliculas -------------------- */
+#trabajos {
+  padding: 1rem 2.5rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+#trabajos h1 {
+  font-size: 2em;
+  font-weight: 450;
+}
+
+.galeria {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem auto;
+}
+
+.proyecto {
+  position: relative;
+  width: 22vw;
+  height: 50vh;
+  border-radius: 0.8rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.proyecto img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.proyecto:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.info {
+  color: #fff;
+}
+
+.proyecto:hover .overlay {
+  opacity: 1;
+}
+
+.info h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.info p {
+  margin-bottom: 1.2rem;
+}
+
+.proyecto:hover {
+  cursor: pointer;
+}
+
+/*  MODAL */
+.modal {
+  display: flex;
+  position: fixed;
+  z-index: 1001;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: rgba(0, 0, 0, 0.95);
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 40%;
+  max-height: 100%;
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  color: wheat;
+}
+
+.modal-content h2{
+  text-align: center;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  background-color: rgb(26, 26, 26);
+  width: 3rem;
+  border-radius: 1rem;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-content img {
+  max-width: 100%;
+  height: 350px;
+  margin: 2px auto;
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: rgba(50, 50, 50, 0.7); 
+  border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: rgba(245,222,179, 0.7);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(150, 150, 150, 1); 
+}
+
+#noDataFound{
+  text-align: center;
+  width: 100%;
+  color: wheat;
+  font-size: large;
+  margin-top: 1rem;
+}
+
+#noDataFound p{
+  font-size: x-large;
+}
+
+
+
+/* Media Queries for Responsiveness */
+@media screen and (min-width: 768px) {
+  #searchBtn, #filterBtn {
+    width: auto; /* Allow the button width to adjust with content */
+  }
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    padding-top: 0;
+  }
+
+  #searchBtn, #filterBtn {
+    padding: 0.6rem; /* Adjust padding for smaller screens */
+    width: 45%; /* Buttons should take more space on smaller screens */
+    font-size: 1rem; /* Ensure font size is consistent */
+  }
+
+  #form{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    padding: 0 0.5rem;
+  }
+
+  .headerContainer {
+    flex-direction: column;
+    padding: 0.5rem;
+    width: 100%;
+    border-radius: 0.5rem;
+    position: inherit;
+  }
+
+  .headerContainer p {
+    display: none;
+  }
+
+  .contentHeader {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  #titulo {
+    width: 100%;
+    padding: 0.7rem;
+  }
+
+  #searchBtn, #fiterBtn {
+    width: 20%;
+    padding: 0.5rem;
+    margin-left: 5%;
+  }
+
+  #trabajos {
+    padding: 0.5rem;
+  }
+
+  .galeria {
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  .proyecto {
+    width: 45%;
+    height: 30vh;
+  }
+
+  .modal-content {
+    max-width: 90%;
+    max-height: 90%;
+}
+}
+
+@media screen and (max-width: 480px) {
+  
+  .headerContainer {
+    padding: 0.3rem;
+  }
+  
+  .headerContainer h1 {
+    font-size: 1.8rem;
+  }
+
+  input {
+    width: 60%;
+    padding: 0.4rem;
+  }
+
+  #searchBtn, #fiterBtn {
+    width: 30%;
+    padding: 0.4rem;
+  }
+
+  #trabajos h1 {
+    font-size: 1.3em;
+  }
+
+  .proyecto {
+    height: 25vh;
+  }
+
+  .info h3 {
+    font-size: 1rem;
+  }
+
+  .info p {
+    font-size: 0.7rem;
+  }
+
+  #searchBtn, #filterBtn {
+    width: 45%; /* Ensure buttons are not too small */
+    padding: 0.5rem; /* Smaller padding on very small screens */
+    font-size: 0.9rem; /* Slightly smaller font size */
+  }
+}
