@@ -8,8 +8,28 @@
 
 body {
   background-color: #00050d;
-  padding-top: 5rem;
+  padding-top: 3rem;
 }
+
+.landing-message {
+  text-align: center;
+  padding: 2rem;
+  color: wheat;
+  border-radius: 1rem;
+  margin-top: 2rem;
+  font-size: 1.5rem;
+}
+
+.landing-message h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.landing-message p {
+  font-size: x-large;
+  margin-top: 0.5rem;
+}
+
 
 /* -------------------- Header -------------------- */
 .headerContainer {
@@ -19,7 +39,7 @@ body {
   align-items: center;
   gap: 0.5rem;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0.2rem 1rem;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 1rem;
   flex-wrap: nowrap;
@@ -53,6 +73,14 @@ input {
   border-radius: 0.5rem;
 }
 
+a{
+  color: wheat;
+}
+
+a:active, a:hover{
+  color: white;
+}
+
 #form{
   flex-basis: 50%;
   display: flex;
@@ -62,48 +90,32 @@ input {
 
 /* General Button Styles */
 .headerBtn {
-  padding: 0.8rem 1.2rem; /* Add padding for better size */
+  padding: 0.8rem 1.2rem; 
   background-color: #007bff;
-  color: white; /* Ensure text is white for better contrast */
-  border: 1px solid #0056b3; /* Border color matching the button */
+  color: white; 
+  border: 1px solid #0056b3;
   border-radius: 0.5rem;
-  font-size: 1rem; /* Standard font size */
-  font-weight: 500; /* Slightly bold for clarity */
+  font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-/* Hover effect */
 .headerBtn:hover {
   background-color: #0056b3;
-  border-color: #003f8e; /* Darker border color on hover */
-  transform: translateY(-2px); /* Slight lift effect */
+  border-color: #003f8e; 
+  transform: translateY(-2px);
 }
 
-/* Focus effect for accessibility */
 .headerBtn:focus {
-  outline: 2px solid #0056b3; /* Add outline for better focus visibility */
+  outline: 2px solid #0056b3;
   outline-offset: 2px;
 }
 
-/* Active button effect */
 .headerBtn:active {
   background-color: #004494;
-  transform: translateY(1px); /* Slight push-down effect on click */
+  transform: translateY(1px);
 }
-
-#searchBtn, #fiterBtn {
-  padding: 0.8rem;
-  width: 20%;
-  background-color: #007bff;
-  border-radius: 0.3rem;
-}
-
-#searchBtn:hover, #fiterBtn:hover {
-  background-color: #0056b3;
-  cursor: pointer;
-}
-
 
 .modal-content {
   background-color: white;
@@ -111,7 +123,7 @@ input {
   border-radius: 5px;
   width: 100%;
 }
-/* Filter Modal Styles */
+
 #filterModalTitle{
   margin-bottom: 5px;
 }
@@ -301,6 +313,7 @@ input {
 }
 
 #noDataFound{
+  display: none;
   text-align: center;
   width: 100%;
   color: wheat;
@@ -314,10 +327,9 @@ input {
 
 
 
-/* Media Queries for Responsiveness */
 @media screen and (min-width: 768px) {
   #searchBtn, #filterBtn {
-    width: auto; /* Allow the button width to adjust with content */
+    width: auto;
   }
 }
 
@@ -327,16 +339,16 @@ input {
   }
 
   #searchBtn, #filterBtn {
-    padding: 0.6rem; /* Adjust padding for smaller screens */
-    width: 45%; /* Buttons should take more space on smaller screens */
-    font-size: 1rem; /* Ensure font size is consistent */
+    padding: 0.6rem;
+    width: 45%; 
+    font-size: 1rem;
   }
 
   #form{
     width: 100%;
     display: flex;
-    flex-direction: row;
-    gap: 0;
+    flex-direction: column;
+    gap: 8px;
     padding: 0 0.5rem;
   }
 
@@ -427,8 +439,9 @@ input {
   }
 
   #searchBtn, #filterBtn {
-    width: 45%; /* Ensure buttons are not too small */
-    padding: 0.5rem; /* Smaller padding on very small screens */
-    font-size: 0.9rem; /* Slightly smaller font size */
+    width: 45%; 
+    padding: 0.5rem;
+    font-size: 0.9rem;
   }
+
 }

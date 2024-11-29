@@ -84,9 +84,11 @@ window.onload = () => {
             isSearching = true;
             galeriaContainer.innerHTML = ''; 
             window.removeEventListener('scroll', handleScroll);
+            document.getElementById('landingMessage').style.display = "none";  
             peticionAJAXmoderna(searchTerm);
         }
     }
+    
 
     searchBtn.addEventListener('click', performSearch);
 
@@ -188,6 +190,7 @@ window.onload = () => {
         closeBtn.className = 'close';
         closeBtn.innerHTML = '&times;';
         closeBtn.onclick = () => modal.remove();
+        document.addEventListener('keydown', (e) => { if (e.key == "Escape"){modal.remove()}; });
 
         const modalTitle = document.createElement('h2');
         modalTitle.textContent = title;

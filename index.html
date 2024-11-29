@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Buscador Ortiz</title>
+    <link href="./assets/favicon.png" rel="shortcut icon" type="image/x-icon">    
+    <title>Buscador OMovieDB</title>
     <script src="script.js"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,7 +18,7 @@
     <div class="headerContainer">
       <!-- Content-->
       <div class="contentHeader">
-        <h1>Te damos la bienvenida.</h1>
+        <h1>OMovieDB.</h1>
         <p>
           Mucho entretenimiento por descubrir. 
         </p>
@@ -25,12 +26,21 @@
       <!--Formulario-->
       <div id="form">
         <input type="text" name="titulo" id="titulo" placeholder="Pelicula, serie...">
-        <button class="headerBtn" id="searchBtn">Search</button>
-        <button class="headerBtn" id="filterBtn">Filters</button>
+        <div class="btnCointainer">
+          <button class="headerBtn" id="searchBtn">Search</button>
+          <button class="headerBtn" id="filterBtn">Filters</button>
+        </div>
       </div>
     </div>
     
     <section id="trabajos">
+      <!--Landing mesage-->
+      <div id="landingMessage" class="landing-message">
+        <h1>Bienvenido a OMovieDB</h1>
+        <p>Empieza a buscar peliculas, series y más. ¡Introduce un título en el campo Buscar para comenzar</p>
+        <p>Si te interesa <a href="https://www.linkedin.com/in/jesusdortizreyes/" target="_blank">saber acerca de mí.</a></p>
+      </div>
+      
       <!--Contenedor Peliculas -->
       <div id="galeriaPeliculas" class="galeria">
         <!--- Proyectos -->
