@@ -45,9 +45,10 @@ window.onload = () => {
             filters.year = document.getElementById('yearFilter').value;
             filters.rating = document.getElementById('ratingFilter').value;
             modal.remove();
+            document.body.classList.remove('modal-open');
             performSearch();
         });
-
+    
         document.getElementById('clearFilters').addEventListener('click', () => {
             document.getElementById('typeFilter').value = '';
             document.getElementById('yearFilter').value = '';
@@ -182,24 +183,36 @@ window.onload = () => {
         const modal = document.createElement('div');
         modal.className = 'modal';
         modal.id = id;
-
+    
         const modalContent = document.createElement('div');
         modalContent.className = 'modal-content';
-
+    
         const closeBtn = document.createElement('span');
         closeBtn.className = 'close';
         closeBtn.innerHTML = '&times;';
-        closeBtn.onclick = () => modal.remove();
-        document.addEventListener('keydown', (e) => { if (e.key == "Escape"){modal.remove()}; });
-
+        closeBtn.onclick = () => {
+            modal.remove();
+            document.body.classList.remove('modal-open');
+        };
+        
+        document.addEventListener('keydown', (e) => { 
+            if (e.key == "Escape"){
+                modal.remove();
+                document.body.classList.remove('modal-open');
+            }
+        });
+    
         const modalTitle = document.createElement('h2');
         modalTitle.textContent = title;
-
+    
         modalContent.appendChild(closeBtn);
         modalContent.appendChild(modalTitle);
         modal.appendChild(modalContent);
         document.body.appendChild(modal);
-
+    
+        // Add the modal-open class to body
+        document.body.classList.add('modal-open');
+    
         return modal;
     }
 };
