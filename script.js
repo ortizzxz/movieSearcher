@@ -152,7 +152,7 @@ window.onload = () => {
     }
 
     async function peticionIDMovie(imdbID) {
-        const URL = "http://www.omdbapi.com/?apikey=54349e1c&";
+        const URL = "https://www.omdbapi.com/?apikey=54349e1c&";
         try {
             const res = await fetch(`${URL}i=${imdbID}`, { method: "GET" });
             const movie = await res.json();
