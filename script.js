@@ -19,6 +19,7 @@ window.onload = () => {
     };
 
 
+    /*** MODALS AND FILTERS ***/
     function openFilterModal() {
         const modal = createModal('filterModal', 'Filtrar Resultados');
         const filterContent = `
@@ -67,6 +68,7 @@ window.onload = () => {
         document.body.classList.remove('modal-open');
     }
 
+    /*** INFINITE SCROLL ***/
     function setupInfiniteScroll(searchTerm) {
         currentPage = 1;
         currentSearch = searchTerm;
@@ -87,6 +89,7 @@ window.onload = () => {
         }
     }
 
+    /*** SEARCHING UTILITIES ***/
     function performSearch() {
         const searchTerm = input.value.trim();
         if (searchTerm && !isSearching) {
@@ -142,6 +145,7 @@ window.onload = () => {
         isSearching = false;
     }
 
+    /*** MOVIES DISPLAY ***/
     function createMovieElement(movie) {
         const proyectoContainer = document.createElement('div');
         proyectoContainer.className = "proyecto";
@@ -176,7 +180,7 @@ window.onload = () => {
         modal.querySelector('.modal-content').insertAdjacentHTML('beforeend', movieContent);
     }
 
-    // Create modal element
+    /*** MOVIE MODAL ***/
     function createModal(id, title) {
         const modal = document.createElement('div');
         modal.className = 'modal';
@@ -202,13 +206,35 @@ window.onload = () => {
         return modal;
     }
 
+    /*** EVENT LISTENERS ***/
     searchBtn.addEventListener('click', performSearch);
-    input.addEventListener('keydown', (e) => {
+    
+
+    input.addEventListener('keyup', (e) => {
+        const searchTerm = input.value.trim();
         if (e.key === "Enter") {
             e.preventDefault();
-            performSearch();
+            performSearch(); 
+        } else if (searchTerm.length >= 3) {
+            performSearch(); 
+        }else{
+            hideWelcomePage();
+            displayStandarPage();
         }
     });
-
+    
+    document.addEventListener('keydown', (e) => {if(e.key == "Escape") closeModal()})
     filterBtn.addEventListener('click', openFilterModal);
+
+
+    /*** DISPLAY STANDAR ***/
+    function displayStandarPage(){
+        galeriaContainer.innerHTML = ''; 
+        noDataMsg.style.display = "block";  
+    }
+    /*** HIDE WELCOME ***/
+    function hideWelcomePage(){
+        landingMsg.style.display = "none";
+    }
+
 };

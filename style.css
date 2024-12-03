@@ -76,6 +76,7 @@ input {
   border-radius: 0.5rem;
 }
 
+
 a{
   color: wheat;
 }
@@ -93,7 +94,8 @@ a:active, a:hover{
 
 /* General Button Styles */
 .headerBtn {
-  padding: 0.8rem 1.2rem; 
+  width: 31%;
+  padding: 0.8rem 0.8rem; 
   background-color: #007bff;
   color: white; 
   border: 1px solid #0056b3;
@@ -127,10 +129,6 @@ a:active, a:hover{
   width: 100%;
 }
 
-#filterModalTitle{
-  margin-bottom: 5px;
-}
-
 #filterModal select,
 #filterModal input[type="number"] {
     display: block;
@@ -156,7 +154,6 @@ a:active, a:hover{
   cursor: pointer;
 }
 
-/* Optional: Add some hover effects */
 .filterModalBtn:hover {
   opacity: 0.9;
 }
@@ -269,6 +266,7 @@ a:active, a:hover{
 
 .modal-content h2{
   text-align: center;
+  margin-bottom: 10px;
 }
 
 .close {
@@ -281,6 +279,7 @@ a:active, a:hover{
   background-color: rgb(26, 26, 26);
   width: 3rem;
   border-radius: 1rem;
+  margin: 0;
 }
 
 .close:hover,
