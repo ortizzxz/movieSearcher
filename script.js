@@ -5,10 +5,11 @@ window.onload = () => {
     const landingMsg = document.getElementById('landingMessage');
     const galeriaContainer = document.getElementById('galeriaPeliculas');
     const filterBtn = document.getElementById("filterBtn");
-    
+    const reportBtn = document.getElementById('createReportBtn');
+
     const API_KEY = "54349e1c";
     const OMDB_API_URL = "https://www.omdbapi.com/";
-    
+
     let isSearching = false;
     let currentPage = 1;
     let currentSearch = '';
@@ -17,6 +18,9 @@ window.onload = () => {
         year: '',
         rating: ''
     };
+
+    let movieData = [];
+
 
 
     /*** MODALS AND FILTERS ***/
@@ -94,8 +98,8 @@ window.onload = () => {
         const searchTerm = input.value.trim();
         if (searchTerm && !isSearching) {
             isSearching = true;
-            galeriaContainer.innerHTML = ''; 
-            noDataMsg.style.display = "none";  
+            galeriaContainer.innerHTML = '';
+            noDataMsg.style.display = "none";
             landingMsg.style.display = "none";
             fetchMovies(searchTerm);
         }
@@ -123,11 +127,25 @@ window.onload = () => {
         return filterParams;
     }
 
-    function handleMoviesResponse(movies, searchTerm, page) {
+    async function handleMoviesResponse(movies, searchTerm, page) {
         if (movies.Response === "True" && Array.isArray(movies.Search)) {
             noDataMsg.style.display = "none";
-            const filteredMovies = movies.Search.filter(movie => !filters.rating || movie.Rated === filters.rating);
-            filteredMovies.forEach(createMovieElement);
+    
+            const fetchDetailsPromises = movies.Search.map(async movie => {
+                const details = await fetchMovieDetails(movie.imdbID);
+                movieData.push({
+                    title: movie.Title,
+                    rating: details.rating,
+                    votes: details.votes,
+                    revenue: details.revenue,
+                });
+                return movie;
+            });
+    
+            const moviesWithDetails = await Promise.all(fetchDetailsPromises);
+    
+            moviesWithDetails.forEach(createMovieElement);
+    
             if (page === 1) {
                 setupInfiniteScroll(searchTerm);
             }
@@ -136,6 +154,8 @@ window.onload = () => {
         }
         isSearching = false;
     }
+    
+
 
     function showErrorState(page) {
         noDataMsg.style.display = "block";
@@ -154,20 +174,30 @@ window.onload = () => {
         imgProyecto.alt = movie.Title;
         proyectoContainer.appendChild(imgProyecto);
         galeriaContainer.appendChild(proyectoContainer);
-
+    
         proyectoContainer.addEventListener('click', () => {
             fetchMovieDetails(movie.imdbID)
-                .then(plot => openModal(movie, plot))
+                .then(details => {
+                    openModal(movie, details.plot);
+                })
                 .catch(error => console.error("Error:", error));
         });
     }
+    
 
     async function fetchMovieDetails(imdbID) {
         const url = `${OMDB_API_URL}?apikey=${API_KEY}&i=${imdbID}`;
         const response = await fetch(url);
         const movie = await response.json();
-        return movie.Plot;
+    
+        return {
+            plot: movie.Plot,
+            rating: movie.imdbRating || "N/A",
+            votes: movie.imdbVotes || "N/A",
+            revenue: movie.BoxOffice || "N/A",
+        };
     }
+    
 
     function openModal(movie, plot) {
         const modal = createModal('movieModal', movie.Title);
@@ -178,6 +208,60 @@ window.onload = () => {
             <p><strong>Type:</strong> ${movie.Type}</p>
         `;
         modal.querySelector('.modal-content').insertAdjacentHTML('beforeend', movieContent);
+    }
+
+    /**REPORT GENERATOR*/
+    function generateReport() {
+        const sortedByRating = [...movieData].sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
+        const sortedByVotes = [...movieData].sort((a, b) => parseInt(b.votes.replace(/,/g, '')) - parseInt(a.votes.replace(/,/g, '')));
+        const sortedByRevenue = [...movieData].sort((a, b) => parseInt(b.revenue.replace(/[\$,]/g, '')) - parseInt(a.revenue.replace(/[\$,]/g, '')));
+
+        const reportModal = createModal('reportModal', 'Reporte');
+        const canvas = document.createElement('canvas');
+        reportModal.querySelector('.modal-content').appendChild(canvas);
+
+        const ctx = canvas.getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: sortedByRating.map(movie => movie.title),
+                datasets: [
+                    {
+                        label: 'Ratings',
+                        data: sortedByRating.map(movie => movie.rating),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                    },
+                    {
+                        label: 'Votes',
+                        data: sortedByVotes.map(movie => parseInt(movie.votes.replace(/,/g, ''))),
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1,
+                    },
+                    {
+                        label: 'Revenues',
+                        data: sortedByRevenue.map(movie => parseInt(movie.revenue.replace(/[\$,]/g, ''))),
+                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Informe de Películas',
+                    },
+                },
+            },
+        });
     }
 
     /*** MOVIE MODAL ***/
@@ -208,33 +292,38 @@ window.onload = () => {
 
     /*** EVENT LISTENERS ***/
     searchBtn.addEventListener('click', performSearch);
-    
+
 
     input.addEventListener('keyup', (e) => {
         const searchTerm = input.value.trim();
         if (e.key === "Enter") {
             e.preventDefault();
-            performSearch(); 
+            performSearch();
         } else if (searchTerm.length >= 3) {
-            performSearch(); 
-        }else{
+            performSearch();
+        } else {
             hideWelcomePage();
             displayStandarPage();
+            clearMovieData();
         }
     });
-    
-    document.addEventListener('keydown', (e) => {if(e.key == "Escape") closeModal()})
+
+    document.addEventListener('keydown', (e) => { if (e.key == "Escape") closeModal() })
     filterBtn.addEventListener('click', openFilterModal);
+    reportBtn.addEventListener('click', generateReport);
 
 
     /*** DISPLAY STANDAR ***/
-    function displayStandarPage(){
-        galeriaContainer.innerHTML = ''; 
-        noDataMsg.style.display = "block";  
+    function displayStandarPage() {
+        galeriaContainer.innerHTML = '';
+        noDataMsg.style.display = "block";
     }
     /*** HIDE WELCOME ***/
-    function hideWelcomePage(){
+    function hideWelcomePage() {
         landingMsg.style.display = "none";
     }
-
+    /**CLEAR MOVIE DATA*/
+    function clearMovieData(){
+        movieData = [];
+    }
 };
