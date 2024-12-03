@@ -11,6 +11,10 @@ body {
   padding-top: 3rem;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 .landing-message {
   text-align: center;
   padding: 2rem;
@@ -28,10 +32,6 @@ body {
 .landing-message p {
   font-size: x-large;
   margin-top: 0.5rem;
-}
-
-body.modal-open {
-  overflow: hidden;
 }
 
 /* -------------------- Header -------------------- */
@@ -56,7 +56,6 @@ body.modal-open {
   backdrop-filter: blur(20px); 
 }
 
-
 .headerContainer p {
   font-size: x-large;
 }
@@ -76,20 +75,23 @@ input {
   border-radius: 0.5rem;
 }
 
-
-a{
+a {
   color: wheat;
 }
 
-a:active, a:hover{
+a:active, a:hover {
   color: white;
 }
 
-#form{
+#form {
   flex-basis: 50%;
   display: flex;
   flex-direction: row;
   gap: 1rem;
+}
+
+#loadingGif {
+  margin-top: 1rem;
 }
 
 /* General Button Styles */
@@ -131,12 +133,12 @@ a:active, a:hover{
 
 #filterModal select,
 #filterModal input[type="number"] {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
 /* New styles for button container */
@@ -264,7 +266,7 @@ a:active, a:hover{
   color: wheat;
 }
 
-.modal-content h2{
+.modal-content h2 {
   text-align: center;
   margin-bottom: 10px;
 }
@@ -314,7 +316,7 @@ a:active, a:hover{
   background: rgba(150, 150, 150, 1); 
 }
 
-#noDataFound{
+#noDataFound {
   display: none;
   text-align: center;
   width: 100%;
@@ -323,14 +325,13 @@ a:active, a:hover{
   margin-top: 1rem;
 }
 
-#noDataFound p{
+#noDataFound p {
   font-size: x-large;
 }
 
-
-
+/* Media Queries */
 @media screen and (min-width: 768px) {
-  #searchBtn, #filterBtn {
+  #searchBtn, #filterBtn, #createReportBtn {
     width: auto;
   }
 }
@@ -340,13 +341,13 @@ a:active, a:hover{
     padding-top: 0;
   }
 
-  #searchBtn, #filterBtn {
+  #searchBtn, #filterBtn, #createReport {
     padding: 0.6rem;
     width: 45%; 
     font-size: 1rem;
   }
 
-  #form{
+  #form {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -377,12 +378,6 @@ a:active, a:hover{
     padding: 0.7rem;
   }
 
-  #searchBtn, #fiterBtn {
-    width: 20%;
-    padding: 0.5rem;
-    margin-left: 5%;
-  }
-
   #trabajos {
     padding: 0.5rem;
   }
@@ -401,15 +396,14 @@ a:active, a:hover{
   .modal-content {
     max-width: 90%;
     max-height: 90%;
-}
+  }
 }
 
 @media screen and (max-width: 480px) {
-  
   .headerContainer {
     padding: 0.3rem;
   }
-  
+
   .headerContainer h1 {
     font-size: 1.8rem;
   }
@@ -419,7 +413,7 @@ a:active, a:hover{
     padding: 0.4rem;
   }
 
-  #searchBtn, #fiterBtn {
+  #searchBtn, #filterBtn, #createReport {
     width: 30%;
     padding: 0.4rem;
   }
@@ -440,10 +434,9 @@ a:active, a:hover{
     font-size: 0.7rem;
   }
 
-  #searchBtn, #filterBtn {
-    width: 45%; 
+  #searchBtn, #filterBtn, #createReport {
+    width: 32%;
     padding: 0.5rem;
     font-size: 0.9rem;
   }
-
 }

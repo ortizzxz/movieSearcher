@@ -5,7 +5,7 @@ window.onload = () => {
     const landingMsg = document.getElementById('landingMessage');
     const galeriaContainer = document.getElementById('galeriaPeliculas');
     const filterBtn = document.getElementById("filterBtn");
-    const reportBtn = document.getElementById('createReportBtn');
+    const reportBtn = document.getElementById('createReport');
 
     const API_KEY = "54349e1c";
     const OMDB_API_URL = "https://www.omdbapi.com/";
@@ -108,7 +108,9 @@ window.onload = () => {
     async function fetchMovies(searchTerm, page = 1) {
         const filterParams = buildFilterParams();
         const url = `${OMDB_API_URL}?apikey=${API_KEY}&s=${encodeURIComponent(searchTerm)}${filterParams}&page=${page}`;
-
+    
+        document.getElementById('loadingGif').style.display = 'block';
+    
         try {
             const response = await fetch(url);
             const movies = await response.json();
@@ -116,8 +118,11 @@ window.onload = () => {
         } catch (err) {
             console.error("Error:", err);
             showErrorState(page);
+        } finally {
+            document.getElementById('loadingGif').style.display = 'none';
         }
     }
+    
 
     function buildFilterParams() {
         let filterParams = '';
