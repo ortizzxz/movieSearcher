@@ -29,17 +29,17 @@ window.onload = () => {
         const filterContent = `
             <select id="typeFilter">
                 <option value="">Todos los tipos</option>
-                <option value="movie">Peliculas</option>
-                <option value="series">Series</option>
-                <option value="episode">Episodios</option>
+                <option value="movie" ${filters.type === 'movie' ? 'selected' : ''}>Peliculas</option>
+                <option value="series" ${filters.type === 'series' ? 'selected' : ''}>Series</option>
+                <option value="episode" ${filters.type === 'episode' ? 'selected' : ''}>Episodios</option>
             </select>
-            <input type="number" id="yearFilter" placeholder="Año">
+            <input type="number" id="yearFilter" placeholder="Año" value="${filters.year || ''}">
             <select id="ratingFilter">
                 <option value="">Ratings</option>
-                <option value="G">G</option>
-                <option value="PG">PG</option>
-                <option value="PG-13">PG-13</option>
-                <option value="R">R</option>
+                <option value="G" ${filters.rating === 'G' ? 'selected' : ''}>G</option>
+                <option value="PG" ${filters.rating === 'PG' ? 'selected' : ''}>PG</option>
+                <option value="PG-13" ${filters.rating === 'PG-13' ? 'selected' : ''}>PG-13</option>
+                <option value="R" ${filters.rating === 'R' ? 'selected' : ''}>R</option>
             </select>
             <div class="filterModalButtonContainer">
                 <button id="applyFilters" class="filterModalBtn">Aplicar Filtros</button>
@@ -47,10 +47,11 @@ window.onload = () => {
             </div>
         `;
         modal.querySelector('.modal-content').insertAdjacentHTML('beforeend', filterContent);
-
+    
         document.getElementById('applyFilters').addEventListener('click', applyFilters);
         document.getElementById('clearFilters').addEventListener('click', clearFilters);
     }
+    
 
     function applyFilters() {
         filters.type = document.getElementById('typeFilter').value;
@@ -108,9 +109,9 @@ window.onload = () => {
     async function fetchMovies(searchTerm, page = 1) {
         const filterParams = buildFilterParams();
         const url = `${OMDB_API_URL}?apikey=${API_KEY}&s=${encodeURIComponent(searchTerm)}${filterParams}&page=${page}`;
-    
+
         document.getElementById('loadingGif').style.display = 'block';
-    
+
         try {
             const response = await fetch(url);
             const movies = await response.json();
@@ -122,7 +123,7 @@ window.onload = () => {
             document.getElementById('loadingGif').style.display = 'none';
         }
     }
-    
+
 
     function buildFilterParams() {
         let filterParams = '';
@@ -135,7 +136,7 @@ window.onload = () => {
     async function handleMoviesResponse(movies, searchTerm, page) {
         if (movies.Response === "True" && Array.isArray(movies.Search)) {
             noDataMsg.style.display = "none";
-    
+
             const fetchDetailsPromises = movies.Search.map(async movie => {
                 const details = await fetchMovieDetails(movie.imdbID);
                 movieData.push({
@@ -146,11 +147,11 @@ window.onload = () => {
                 });
                 return movie;
             });
-    
+
             const moviesWithDetails = await Promise.all(fetchDetailsPromises);
-    
+
             moviesWithDetails.forEach(createMovieElement);
-    
+
             if (page === 1) {
                 setupInfiniteScroll(searchTerm);
             }
@@ -159,16 +160,20 @@ window.onload = () => {
         }
         isSearching = false;
     }
-    
+
 
 
     function showErrorState(page) {
         noDataMsg.style.display = "block";
+        noDataMsg.innerText = page === 1 
+            ? "No se encontraron resultados. Intenta una búsqueda diferente." 
+            : "No hay más resultados disponibles.";
         if (page === 1) {
-            galeriaContainer.innerHTML = '';
+            galeriaContainer.innerHTML = '';    
         }
         isSearching = false;
     }
+    
 
     /*** MOVIES DISPLAY ***/
     function createMovieElement(movie) {
@@ -179,7 +184,7 @@ window.onload = () => {
         imgProyecto.alt = movie.Title;
         proyectoContainer.appendChild(imgProyecto);
         galeriaContainer.appendChild(proyectoContainer);
-    
+
         proyectoContainer.addEventListener('click', () => {
             fetchMovieDetails(movie.imdbID)
                 .then(details => {
@@ -188,13 +193,13 @@ window.onload = () => {
                 .catch(error => console.error("Error:", error));
         });
     }
-    
+
 
     async function fetchMovieDetails(imdbID) {
         const url = `${OMDB_API_URL}?apikey=${API_KEY}&i=${imdbID}`;
         const response = await fetch(url);
         const movie = await response.json();
-    
+
         return {
             plot: movie.Plot,
             rating: movie.imdbRating || "N/A",
@@ -202,7 +207,7 @@ window.onload = () => {
             revenue: movie.BoxOffice || "N/A",
         };
     }
-    
+
 
     function openModal(movie, plot) {
         const modal = createModal('movieModal', movie.Title);
@@ -217,9 +222,11 @@ window.onload = () => {
 
     /**REPORT GENERATOR*/
     function generateReport() {
-        const sortedByRating = [...movieData].sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
-        const sortedByVotes = [...movieData].sort((a, b) => parseInt(b.votes.replace(/,/g, '')) - parseInt(a.votes.replace(/,/g, '')));
-        const sortedByRevenue = [...movieData].sort((a, b) => parseInt(b.revenue.replace(/[\$,]/g, '')) - parseInt(a.revenue.replace(/[\$,]/g, '')));
+        const topMovies = movieData.slice(0, 5);
+
+        const sortedByRating = [...topMovies].sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
+        const sortedByVotes = [...topMovies].sort((a, b) => parseInt(b.votes.replace(/,/g, '')) - parseInt(a.votes.replace(/,/g, '')));
+        const sortedByRevenue = [...topMovies].sort((a, b) => parseInt(b.revenue.replace(/[\$,]/g, '')) - parseInt(a.revenue.replace(/[\$,]/g, '')));
 
         const reportModal = createModal('reportModal', 'Reporte');
         const canvas = document.createElement('canvas');
@@ -229,7 +236,7 @@ window.onload = () => {
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: sortedByRating.map(movie => movie.title),
+                labels: sortedByRating.map(movie => movie.title.length > 15 ? movie.title.slice(0, 12) + '...' : movie.title),
                 datasets: [
                     {
                         label: 'Ratings',
@@ -265,8 +272,25 @@ window.onload = () => {
                         text: 'Informe de Películas',
                     },
                 },
+                scales: {
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 15,
+                            },
+                        },
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 15,
+                            },
+                        },
+                    },
+                },
             },
         });
+
     }
 
     /*** MOVIE MODAL ***/
@@ -298,20 +322,24 @@ window.onload = () => {
     /*** EVENT LISTENERS ***/
     searchBtn.addEventListener('click', performSearch);
 
-
+    let debounceTimeout;
     input.addEventListener('keyup', (e) => {
-        const searchTerm = input.value.trim();
-        if (e.key === "Enter") {
-            e.preventDefault();
-            performSearch();
-        } else if (searchTerm.length >= 3) {
-            performSearch();
-        } else {
-            hideWelcomePage();
-            displayStandarPage();
-            clearMovieData();
-        }
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const searchTerm = input.value.trim();
+            if (e.key === "Enter") {
+                e.preventDefault();
+                performSearch();
+            } else if (searchTerm.length >= 3) {
+                performSearch();
+            } else {
+                hideWelcomePage();
+                displayStandarPage();
+                clearMovieData();
+            }
+        }, 300); // Espera 300ms antes de buscar
     });
+
 
     document.addEventListener('keydown', (e) => { if (e.key == "Escape") closeModal() })
     filterBtn.addEventListener('click', openFilterModal);
@@ -328,7 +356,7 @@ window.onload = () => {
         landingMsg.style.display = "none";
     }
     /**CLEAR MOVIE DATA*/
-    function clearMovieData(){
+    function clearMovieData() {
         movieData = [];
     }
 };
